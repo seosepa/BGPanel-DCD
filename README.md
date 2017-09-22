@@ -1,16 +1,16 @@
 # Bright Gamepanel config generator 
 Basic config generation with twig templates and variables from BGPanel Database.
 
-#####workings: <br>
-`php configGetter.php` does a request to the index.php of the generator.
-DCD checks the RemoteADDR of the request and links a BGPanel Box
-json encoded return with all the configfiles + paths
+##### Workings:
+`php configGetter.php` does a request to the index.php of the generator.<br>
+DCD checks the RemoteADDR of the request and links a BGPanel Box.<br>
+DCD returns a json encoded string with all the configfiles + paths
 
-#####Generator system requirements:
+##### Generator system requirements:
 
 * PHP 7.0 or higher + Composer
 
-#####Deployment system requirements:
+##### Deployment system requirements:
 
 * PHP 5.6 or higher
 * Debian/Ubuntu (cronjob command)
