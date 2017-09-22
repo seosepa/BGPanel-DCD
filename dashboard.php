@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 use BGPanelDCD\ServerConfig;
 
 // in
-$remoteIp       = $_SERVER['REQUEST_URI'];
+$uri            = $_SERVER['REQUEST_URI'];
 $remoteIp       = $_SERVER['REMOTE_ADDR'];
 
 // compute

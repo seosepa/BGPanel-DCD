@@ -2,6 +2,8 @@
 
 namespace BGPanelDCD;
 
+use BGPanelDCD\GameConfig\CoD4;
+use BGPanelDCD\GameConfig\UT4;
 use Exception;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
@@ -54,10 +56,13 @@ abstract class ConfigBuilder
      */
     public static function getByBGGameId(int $gameId)
     {
-
         switch ($gameId) {
+            case 9:
+                return new CoD4();
             case 17:
                 return new CSGO();
+            case 24:
+                return new UT4();
             default:
                 throw new Exception("gameMapping not defined for gameId[={$gameId}]");
         }
