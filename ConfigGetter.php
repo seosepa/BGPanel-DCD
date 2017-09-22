@@ -6,33 +6,51 @@
 class ConfigGetter
 {
 
-    private static $commit = true;
+    private $commit = true;
 
-    private static $debugMode = false;
+    private $randomSleepTime = true;
 
-    private static $dcdConfigUrl = 'http://confomator.event.thereality.nl/';
+    private $debugMode = false;
+
+    private $dcdConfigUrl = 'http://confomator.event.thereality.nl/';
+
+    private $amountSuccess = 0;
+
+    private $amountError = 0;
 
     /**
-     *
+     *  Do awesome stuff
      */
-    public static function getAndApplyConfigs()
+    public function getAndApplyConfigs()
     {
-        $url        = self::$dcdConfigUrl;
+        // rand sleep so not all gameserver request at the same time
+        if ($this->randomSleepTime) {
+            sleep(rand(0, 45));
+        }
+
+        $url        = $this->dcdConfigUrl;
         $rawConfigs = file_get_contents($url);
         $configs    = json_decode($rawConfigs, true);
 
         $confCount = count($configs);
-        self::debugLog("fetched {$confCount} configs from DCD {$url}");
+        $this->debugLog("fetched {$confCount} configs from DCD {$url}");
 
         if ($configs != false) {
-            self::writeConfigs($configs);
+            try {
+                $this->writeConfigs($configs);
+            } catch (Exception $e) {
+                $this->debugLog($e->getMessage(), true);
+                $this->amountError++;
+            }
         }
+
+        $this->performCallback($confCount, $this->amountSuccess, $this->amountError);
     }
 
     /**
      * @param array $configs
      */
-    public static function writeConfigs($configs)
+    private function writeConfigs($configs)
     {
         foreach ($configs as $gamePath => $gameConfig) {
             foreach ($gameConfig as $confPath => $configContent) {
@@ -40,16 +58,21 @@ class ConfigGetter
                 $fullpath = "{$gamePath}/{$confPath}";
 
                 if (!file_exists($gamePath)) {
-                    self::debugLog("GamePath[={$gamePath}] does not exist, skipping", true);
+                    $this->debugLog("GamePath[={$gamePath}] does not exist, skipping", true);
+                    $this->amountError++;
                     continue;
                 }
 
-                self::debugLog("writing config to {$fullpath}");
+                $this->debugLog("writing config to {$fullpath}");
 
-                if (self::$commit) {
-                    file_put_contents($fullpath, $configContent);
+                if ($this->commit) {
+                    if (file_put_contents($fullpath, $configContent)) {
+                        $this->amountSuccess++;
+                    } else {
+                        $this->amountError++;
+                    }
                 } else {
-                    self::debugLog("[DRY-RUN] would have written: {$configContent}");
+                    $this->debugLog("[DRY-RUN] would have written: {$configContent}");
                 }
             }
         }
@@ -59,15 +82,27 @@ class ConfigGetter
      * @param string $message
      * @param bool   $isError
      */
-    public static function debugLog($message, $isError = false)
+    private function debugLog($message, $isError = false)
     {
-        if (self::$debugMode == false && !$isError) {
+        if ($this->debugMode == false && !$isError) {
             return;
         }
 
         $date = date('Y-m-d H:i:s');
         echo "[$date] {$message}" . PHP_EOL;
     }
+
+    /**
+     * @param int $totalAmount
+     * @param int $successAmount
+     * @param int $errorAmount
+     */
+    private function performCallback($totalAmount, $successAmount, $errorAmount)
+    {
+        $url = $this->dcdConfigUrl;
+        file_get_contents("{$url}callback.php?total={$totalAmount}&success={$successAmount}&error={$errorAmount}");
+    }
 }
 
-ConfigGetter::getAndApplyConfigs();
+$configGetter = new ConfigGetter();
+$configGetter->getAndApplyConfigs();

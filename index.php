@@ -8,7 +8,7 @@ $remoteIp       = $_SERVER['REQUEST_URI'];
 $remoteIp       = $_SERVER['REMOTE_ADDR'];
 
 // compute
-$configs        = ServerConfig::getConfigsByRemoteIp('62.165.104.33');
+$configs        = ServerConfig::getConfigsByRemoteIp($remoteIp);
 $encodedConfigs = json_encode($configs, JSON_PRETTY_PRINT);
 
 // out
