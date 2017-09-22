@@ -24,7 +24,7 @@ class CoD4 extends ConfigBuilder
             ],
         ];
 
-        $this->gameserverPath = str_replace("/srcds_run", '', $gameserver['path']);
+        $this->gameserverPath = str_replace("/cod4_lnxded", '', $gameserver['path']);
 
         $this->templateData = $templateData;
     }
