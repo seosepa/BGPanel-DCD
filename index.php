@@ -4,8 +4,13 @@ require 'vendor/autoload.php';
 use BGPanelDCD\ServerConfig;
 
 // in
-$remoteIp       = $_SERVER['REQUEST_URI'];
-$remoteIp       = $_SERVER['REMOTE_ADDR'];
+$getIp    = isset($_GET['ip']) ? $_GET['ip'] : '';
+$remoteIp = $_SERVER['REMOTE_ADDR'];
+
+// check if ip and override remoteIp, for debugging
+if (filter_var($getIp, FILTER_VALIDATE_IP)) {
+    $remoteIp = $getIp;
+}
 
 // compute
 $configs        = ServerConfig::getConfigsByRemoteIp($remoteIp);
