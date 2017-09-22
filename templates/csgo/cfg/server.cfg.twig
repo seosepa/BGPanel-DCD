@@ -2,6 +2,7 @@ hostname "{{ name }}"
 rcon_password "tr18rcon"
 sv_password "tr18"
 tv_password "tr18"
+tv_name "{{ name }}"
 tv_title "{{ name }}"
 tv_enable "1"
 tv_deltacache "2"
@@ -12,6 +13,12 @@ tv_maxclients "99"
 sv_hibernate_when_empty 0
 tv_advertise_watchable 1
 
+sv_maxrate 0
+sv_minrate 80000
+sm_cvar sv_maxcmdrate 128
+sv_mincmdrate 128
+sv_minupdaterate 128
+sm_cvar sv_maxupdaterate 128
 
 ammo_grenade_limit_default 1
 ammo_grenade_limit_flashbang 2
