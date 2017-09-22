@@ -38,7 +38,7 @@ class CoD4 extends ConfigBuilder
      */
     public function getServerConfigPath(string $templatePath, string $templateFile)
     {
-        $templateFile = str_replace("cod4/", "", $templateFile);
+        $templatePath = str_replace("cod4/", "", $templatePath);
         return parent::getServerConfigPath($templatePath, $templateFile);
     }
 }
