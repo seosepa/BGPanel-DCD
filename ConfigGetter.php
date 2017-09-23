@@ -32,8 +32,10 @@ class ConfigGetter
         $rawConfigs = file_get_contents($url);
         $configs    = json_decode($rawConfigs, true);
 
-        if ($configs == false){
+        if ($configs == false) {
+            $this->debugLog("Invalid json received from server: " . PHP_EOL . $rawConfigs, true);
             $this->performCallback(-1, 0, -1);
+            return;
         }
 
         $confCount = $this->getConfigCount($configs);
