@@ -24,6 +24,8 @@ class CSGO extends ConfigBuilder
             "server.cfg"   => [
                 'name'    => $gameserver['name'],
                 'tv_port' => $gameserver['port'] + 1,
+				'server_id' => $gameserver['serverid'],
+
             ],
             "settings.cfg" => [],
         ];
