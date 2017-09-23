@@ -36,5 +36,5 @@ Edit ConfigGetter.php
 
 Add CronJob:
 
-`* * * * * flock -n /tmp/dcd-deployment.lock -c "/usr/bin/php /home/game/BGPanel-DCD >> /var/log/dcd-configgetter.log 2>&1"`
+`* * * * * flock -n /tmp/dcd-deployment.lock -c "/usr/bin/php /home/game/BGPanel-DCD/ConfigGetter.php >> /home/game/dcd-configgetter.log 2>&1"`
 

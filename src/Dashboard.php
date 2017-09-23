@@ -34,7 +34,7 @@ class Dashboard
                 $callback['timeAgo']    = $timeAgo->inWords($callback['dateTime']);
                 $callback['secondsAgo'] = time() - strtotime($callback['dateTime']);
                 if ($callback['secondsAgo'] < 120) {
-                    $callback['timeAgo'] = "{$timeAgo} seconds ago";
+                    $callback['timeAgo'] = "{$callback['secondsAgo']} seconds ago";
                 }
                 $boxData = $boxData + $callback;
             }
