@@ -9,14 +9,29 @@ namespace BGPanelDCD\BGPanel;
  */
 class DCDCallback
 {
+    /**
+     * @var int
+     */
     private $boxId = 0;
 
+    /**
+     * @var int
+     */
     private $totalAmount = 0;
 
+    /**
+     * @var int
+     */
     private $successAmount = 0;
 
+    /**
+     * @var int
+     */
     private $errorAmount = 0;
 
+    /**
+     * @var string
+     */
     private $dateTime = '';
 
     /**
@@ -115,5 +130,15 @@ class DCDCallback
                 'dateTime'      => date('Y-m-d H:i:s'),
             ]
         );
+    }
+
+    /**
+     * @param int $boxId
+     * @return array|bool|mixed
+     */
+    public static function getLastestCallbackForBoxId($boxId)
+    {
+        $db = Db::getDb();
+        return $db->get("dcd_callback", "*", ["boxId" => $boxId, "ORDER" => ["dateTime" => "DESC"]]);
     }
 }

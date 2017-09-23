@@ -1,17 +1,10 @@
 <?php
 require 'vendor/autoload.php';
 
-use BGPanelDCD\ServerConfig;
+use BGPanelDCD\Dashboard;
 
-// in
-$uri            = $_SERVER['REQUEST_URI'];
-$remoteIp       = $_SERVER['REMOTE_ADDR'];
+$loader = new Twig_Loader_Filesystem('templates');
+$twig   = new Twig_Environment($loader);
 
-// compute
-$configs        = ServerConfig::getConfigsByRemoteIp($remoteIp);
-$encodedConfigs = json_encode($configs, JSON_PRETTY_PRINT);
-
-// out
-header("Content-type:application/json");
-echo $encodedConfigs;
-
+$data['info'] = Dashboard::getOverviewData();
+echo $twig->render("dashboard.twig", $data);

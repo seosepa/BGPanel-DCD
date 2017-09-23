@@ -4,60 +4,42 @@ namespace BGPanelDCD;
 
 use BGPanelDCD\BGPanel\Box;
 use BGPanelDCD\BGPanel\DCDCallback;
+use Westsworld\TimeAgo;
 
 /**
- * Class ServerConfig
+ * Class Dashboard
  *
  * @package BGPanelDCD
  */
-class ServerConfig
+class Dashboard
 {
-
     /**
-     * @param string $remoteIp
      * @return array
      */
-    public static function getConfigsByRemoteIp(string $remoteIp): array
+    public static function getOverviewData(): array
     {
-        $boxId = Box::getByIp($remoteIp);
+        $infoArray = [];
+        $boxes     = Box::getAll();
 
-        if ($boxId != false) {
-            return self::getConfigsByBoxId($boxId);
+        if ($boxes == false) {
+            return [];
         }
 
-        return [];
-    }
-
-    /**
-     * @param int $boxId
-     * @return array
-     */
-    public static function getConfigsByBoxId(int $boxId): array
-    {
-        $gameservers = Box::findGameserversById($boxId);
-        return ConfigBuilder::buildForGameservers($gameservers);
-    }
-
-    /**
-     * @param string $remoteIp
-     * @param int    $totalAmount
-     * @param int    $successAmount
-     * @param int    $errorAmount
-     */
-    public static function processCallback(string $remoteIp, int $totalAmount, int $successAmount, int $errorAmount)
-    {
-        $boxId = Box::getByIp($remoteIp);
-
-        if ($boxId == false) {
-            return;
+        foreach ($boxes as $box) {
+            $boxData = $box;
+            $boxData['generatedAmount'] = count(ServerConfig::getConfigsByBoxId($box['boxid']));
+            $callback = DCDCallback::getLastestCallbackForBoxId($box["boxid"]);
+            if (is_array($callback)) {
+                $timeAgo = new TimeAgo();
+                $callback['timeAgo'] = $timeAgo->inWords($callback['dateTime']);
+                $callback['secondsAgo'] = time() - strtotime($callback['dateTime']);
+                $boxData = $boxData + $callback;
+            }
+            $infoArray[$box['name']] = $boxData;
         }
 
-        $callback = new DCDCallback();
-        $callback->setBoxId($boxId);
-        $callback->setTotalAmount($totalAmount);
-        $callback->setSuccessAmount($successAmount);
-        $callback->setErrorAmount($errorAmount);
-        $callback->insert();
-    }
+        ksort($infoArray,SORT_NATURAL);
 
+        return $infoArray;
+    }
 }

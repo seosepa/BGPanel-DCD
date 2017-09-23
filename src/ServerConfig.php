@@ -34,7 +34,7 @@ class ServerConfig
      */
     public static function getConfigsByBoxId(int $boxId): array
     {
-        $gameservers = Box::findGameserversById($boxId);
+        $gameservers = Box::findGameserversByBoxId($boxId);
         return ConfigBuilder::buildForGameservers($gameservers);
     }
 
