@@ -7,6 +7,7 @@ tv_title "{{ name }}"
 {% if serverid >= 27 and serverid <= 32 %}
     tv_enable "1"
 {% elseif serverid >= 1 and serverid <= 8 %}
+	tv_enable "1"
 	{% else %}
 	tv_enable "0"
 {% endif %}

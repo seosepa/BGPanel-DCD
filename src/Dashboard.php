@@ -26,19 +26,22 @@ class Dashboard
         }
 
         foreach ($boxes as $box) {
-            $boxData = $box;
-            $boxData['generatedAmount'] = count(ServerConfig::getConfigsByBoxId($box['boxid']));
-            $callback = DCDCallback::getLastestCallbackForBoxId($box["boxid"]);
+            $boxData                    = $box;
+            $boxData['generatedAmount'] = ServerConfig::getConfigCountByBoxId($box['boxid']);
+            $callback                   = DCDCallback::getLastestCallbackForBoxId($box["boxid"]);
             if (is_array($callback)) {
-                $timeAgo = new TimeAgo();
-                $callback['timeAgo'] = $timeAgo->inWords($callback['dateTime']);
+                $timeAgo                = new TimeAgo();
+                $callback['timeAgo']    = $timeAgo->inWords($callback['dateTime']);
                 $callback['secondsAgo'] = time() - strtotime($callback['dateTime']);
+                if ($callback['secondsAgo'] < 120) {
+                    $callback['timeAgo'] = "{$callback['secondsAgo']} seconds ago";
+                }
                 $boxData = $boxData + $callback;
             }
             $infoArray[$box['name']] = $boxData;
         }
 
-        ksort($infoArray,SORT_NATURAL);
+        ksort($infoArray, SORT_NATURAL);
 
         return $infoArray;
     }

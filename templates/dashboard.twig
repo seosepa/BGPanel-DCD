@@ -10,54 +10,59 @@
 <h2>BGPanel DCD Dashboard</h2>
 <table class="table table-striped table-hover table-sm">
     <thead>
-        <tr>
-            <th>BoxName</th>
-            <th>ipAddress</th>
-            <th>lastFetched</th>
-            <th>configsGenerated</th>
-            <th>configsFetched</th>
-            <th>configsApplied</th>
-            <th>configsFailed</th>
-        </tr>
+    <tr>
+        <th>BoxName</th>
+        <th>ipAddress</th>
+        <th>lastFetched</th>
+        <th>configsGenerated</th>
+        <th>configsFetched</th>
+        <th>configsApplied</th>
+        <th>configsFailed</th>
+    </tr>
     </thead>
     <tbody>
     {% for box in info %}
+        {% if box.generatedAmount == -1 or box.totalAmount == -1 or box.successAmount == -1 or box.errorAmount == -1 %}
+            <tr class="table-danger">
+        {% else %}
+            <tr>
+        {% endif %}
             <th scope="row">
                 {{ box.name }}
             </th>
             <td>
                 {{ box.ip }}
             </td>
-        {% if box.secondsAgo > 60 %}
-            <td class="table-warning">
-        {% else %}
+            {% if box.secondsAgo > 105 %}
+        <td class="table-warning">
+            {% else %}
             <td>
-        {% endif %}
-                {{ box.timeAgo }}
+            {% endif %}
+            {{ box.timeAgo }}
             </td>
-        {% if box.generatedAmount != box.totalAmount %}
-            <td class="table-info">
-        {% else %}
+            {% if box.generatedAmount != box.totalAmount %}
+        <td class="table-info">
+            {% else %}
             <td>
-        {% endif %}
-                <a href="/?ip={{ box.ip }}">{{ box.generatedAmount }}</a>
+            {% endif %}
+            <a href="/?ip={{ box.ip }}">{{ box.generatedAmount }}</a>
             </td>
-        {% if box.generatedAmount != box.totalAmount %}
-            <td class="table-info">
-        {% else %}
+            {% if box.generatedAmount != box.totalAmount %}
+        <td class="table-info">
+            {% else %}
             <td>
-        {% endif %}
-                {{ box.totalAmount }}
+            {% endif %}
+            {{ box.totalAmount }}
             </td>
             <td>
                 {{ box.successAmount }}
             </td>
-        {% if box.errorAmount > 0 %}
+            {% if box.errorAmount > 0 %}
             <td class="table-danger">
-        {% else %}
+                {% else %}
             <td>
-        {% endif %}
-                {{ box.errorAmount }}
+            {% endif %}
+            {{ box.errorAmount }}
             </td>
         </tr>
     {% endfor %}
