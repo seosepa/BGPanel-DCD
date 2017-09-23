@@ -32,7 +32,7 @@ class ConfigGetter
         $rawConfigs = file_get_contents($url);
         $configs    = json_decode($rawConfigs, true);
 
-        $confCount = count($configs);
+        $confCount = $this->getConfigCount($configs);
         $this->debugLog("fetched {$confCount} configs from DCD {$url}");
 
         if ($configs != false) {
@@ -101,6 +101,20 @@ class ConfigGetter
     {
         $url = $this->dcdConfigUrl;
         file_get_contents("{$url}callback.php?total={$totalAmount}&success={$successAmount}&error={$errorAmount}");
+    }
+
+    /**
+     * @param $gameServerConfigs
+     * @return int
+     */
+    private function getConfigCount($gameServerConfigs)
+    {
+        $count = 0;
+        foreach ($gameServerConfigs as $configs) {
+            $count = $count + count($configs);
+        }
+
+        return $count;
     }
 }
 

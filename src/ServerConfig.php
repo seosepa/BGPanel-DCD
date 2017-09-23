@@ -39,6 +39,21 @@ class ServerConfig
     }
 
     /**
+     * @param int $boxId
+     * @return int
+     */
+    public static function getConfigCountByBoxId(int $boxId): int
+    {
+        $count       = 0;
+        $gameservers = self::getConfigsByBoxId($boxId);
+        foreach ($gameservers as $configs) {
+            $count = $count + count($configs);
+        }
+
+        return $count;
+    }
+
+    /**
      * @param string $remoteIp
      * @param int    $totalAmount
      * @param int    $successAmount

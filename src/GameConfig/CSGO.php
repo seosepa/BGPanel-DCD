@@ -22,9 +22,9 @@ class CSGO extends ConfigBuilder
             "esl5on5.cfg"  => [],
             "live.cfg"     => [],
             "server.cfg"   => [
-                'name'    => $gameserver['name'],
-                'tv_port' => $gameserver['port'] + 1,
-				'serverid' => $gameserver['serverid'],
+                'name'     => $gameserver['name'],
+                'tv_port'  => $gameserver['port'] + 1,
+                'serverid' => $gameserver['serverid'],
 
             ],
             "settings.cfg" => [],
