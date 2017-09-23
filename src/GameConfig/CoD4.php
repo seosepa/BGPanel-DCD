@@ -28,4 +28,17 @@ class CoD4 extends ConfigBuilder
 
         $this->templateData = $templateData;
     }
+
+    /**
+     * CoD4 server conf path diffs from template path
+     *
+     * @param string $templatePath
+     * @param string $templateFile
+     * @return string
+     */
+    public function getServerConfigPath(string $templatePath, string $templateFile)
+    {
+        $templatePath = str_replace("cod4/", "", $templatePath);
+        return parent::getServerConfigPath($templatePath, $templateFile);
+    }
 }

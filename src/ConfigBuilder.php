@@ -98,10 +98,23 @@ abstract class ConfigBuilder
 
         foreach ($templateData as $templateFile => $data) {
             $templatePath           = "{$this->getTemplatePath()}/{$templateFile}";
-            $configs[$templatePath] = $twig->render("{$templatePath}.twig", $data);
+            $serverTemplatePath     = $this->getServerConfigPath($this->getTemplatePath(), $templateFile);
+            $configs[$serverTemplatePath] = $twig->render("{$templatePath}.twig", $data);
         }
 
         return $configs;
+    }
+
+    /**
+     * get path on server, default same, can be overwritten.
+     *
+     * @param string $templatePath
+     * @param string $templateFile
+     * @return string
+     */
+    public function getServerConfigPath(string $templatePath, string $templateFile)
+    {
+        return "{$templatePath}/{$templateFile}";
     }
 
     /**

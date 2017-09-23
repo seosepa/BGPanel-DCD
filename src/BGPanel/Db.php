@@ -52,12 +52,13 @@ class Db
         $prefix = self::$prefix;
         $db->query(
             "CREATE TABLE IF NOT EXISTS `{$prefix}dcd_callback` (
-                  `id` int(11) NOT NULL,
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
                   `boxId` int(11) NOT NULL,
                   `totalAmount` int(11) NOT NULL,
                   `successAmount` int(11) NOT NULL,
                   `errorAmount` int(11) NOT NULL,
                   `dateTime` datetime NOT NULL,
+                  PRIMARY KEY (`id`),
                   KEY `boxId` (`boxId`),
                   KEY `dateTime` (`dateTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
