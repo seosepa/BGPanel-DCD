@@ -19,20 +19,34 @@ class ConfigGetter
     private $amountError = 0;
 
     /**
-     *  Do awesome stuff
+     * ConfigGetter constructor.
+     *
+     * @param array $argv CLI arguments
      */
-    public function getAndApplyConfigs()
+    public function __construct($argv)
     {
+        // easy debugging
+        if(isset($argv[1]) && $argv[1] == "debug") {
+            $this->debugMode = true;
+            $this->randomSleepTime = false;
+        }
+
         // rand sleep so not all gameserver request at the same time
         if ($this->randomSleepTime) {
             sleep(rand(0, 45));
         }
+    }
 
+    /**
+     *  Do awesome stuff
+     */
+    public function getAndApplyConfigs()
+    {
         $url        = $this->dcdConfigUrl;
         $rawConfigs = file_get_contents($url);
         $configs    = json_decode($rawConfigs, true);
 
-        if ($configs == false) {
+        if ($configs == false && !is_array($configs)) {
             $this->debugLog("Invalid json received from server: " . PHP_EOL . $rawConfigs, true);
             $this->performCallback(-1, 0, -1);
             return;
@@ -122,5 +136,5 @@ class ConfigGetter
     }
 }
 
-$configGetter = new ConfigGetter();
+$configGetter = new ConfigGetter($argv);
 $configGetter->getAndApplyConfigs();
