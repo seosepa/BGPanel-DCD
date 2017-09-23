@@ -32,16 +32,18 @@ class ConfigGetter
         $rawConfigs = file_get_contents($url);
         $configs    = json_decode($rawConfigs, true);
 
+        if ($configs == false){
+            $this->performCallback(-1, 0, -1);
+        }
+
         $confCount = $this->getConfigCount($configs);
         $this->debugLog("fetched {$confCount} configs from DCD {$url}");
 
-        if ($configs != false) {
-            try {
-                $this->writeConfigs($configs);
-            } catch (Exception $e) {
-                $this->debugLog($e->getMessage(), true);
-                $this->amountError++;
-            }
+        try {
+            $this->writeConfigs($configs);
+        } catch (Exception $e) {
+            $this->debugLog($e->getMessage(), true);
+            $this->amountError++;
         }
 
         $this->performCallback($confCount, $this->amountSuccess, $this->amountError);
