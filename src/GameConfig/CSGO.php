@@ -19,15 +19,16 @@ class CSGO extends ConfigBuilder
     public function parseConfigToData(array $gameserver)
     {
         $templateData = [
-            "esl5on5.cfg"  => [],
-            "live.cfg"     => [],
-            "server.cfg"   => [
+            "esl5on5.cfg"              => [],
+            "live.cfg"                 => [],
+            "server.cfg"               => [
                 'name'     => $gameserver['name'],
                 'tv_port'  => $gameserver['port'] + 1,
                 'serverid' => $gameserver['serverid'],
 
             ],
-            "settings.cfg" => [],
+            "settings.cfg"             => [],
+            "gamemode_competitive.cfg" => [],
         ];
 
         $this->gameserverPath = str_replace("/srcds_run", '', $gameserver['path']);
